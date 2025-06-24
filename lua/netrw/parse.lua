@@ -14,8 +14,8 @@ local parse_liststyle = function(line, dir)
 
 	local _, shift = string.gsub(line, "|", "")
 
-	while table.getn(dir) > shift do
-		table.remove(dir)
+	while dir:length() > shift do
+		dir:pop()
 	end
 
 	-- symbolic link
@@ -28,9 +28,9 @@ local parse_liststyle = function(line, dir)
 	local _, _, acdir = string.find(pipelessLine, "^(.*)/")
 	if acdir then
 		if shift == 0 then
-			table.insert(dir, "")
+			dir:push("")
 		end
-		table.insert(dir, acdir)
+		dir:push(acdir)
 		return nil
 	end
 

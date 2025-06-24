@@ -6,89 +6,83 @@ function Node:create(val, next)
     }
 end
 
-Queue = {}
+Stack = {}
 
-function Queue:create()
+function Stack:create()
     local object = {}
   
     object.first = nil
     object.last = nil
+    object.size = 0
 
     self.__index = self
-    self.__type = "queue"
+    self.__type = "stack"
     self.__tostring = self.show
-    self.__len = self.length
+    self.__len = self.size
     self.__iter = self.iterator
 
     return setmetatable(object, self)
 end
 
-function Queue:length()
-    local length = 0
-    local it = self.first
-	while it ~= nil do
-		it = it.next
-        length = length + 1
-	end
-    return length
+function Stack:length()
+    return self.size
 end
 
-function Queue:isempty()
-    return self.last == nil
+function Stack:isempty()
+    return self.first == nil
 end
 
-function Queue:iterator()
+function Stack:iterator()
     return function()
         return self:pop()
     end, nil
 end
 
-function Queue:push(item)
+function Stack:push(item)
     local node = Node:create(item)
-    if self.last == nil then
-        self.first = node
-    else 
-        self.last.next = node
+    if self.first ~= nil then
+        node.next = self.first
     end
-    self.last = node
+    self.first = node
+    self.size = self.size + 1
     return self
 end
 
-function Queue:pop()
+function Stack:pop()
     if self:isempty() then 
         return nil
     end
     local ret = self.first
 	self.first = ret.next
-    if self.first == nil then
-        self.last = nil
-    end
+    self.size = self.size - 1
 	return ret.val
 end
 
-function Queue:peek()
-    if self:isempty() == true then 
+function Stack:peek()
+    if self:isempty() then 
         return nil
     end
     return self.first.val
 end
 
-function Queue:totable()
+function Stack:totable()
     local nodes = {}
 	local it = self.first
+    local len = self:length()
+    local k = 1
 	while it ~= nil do
-		table.insert(nodes, it.val)
+		nodes[len + 1 - k] = it.val
+        k = k + 1
 		it = it.next
 	end
     return nodes
 end
 
-function Queue:show(divisions)
+function Stack:show(divisions)
     divisions = divisions or ','
 
 	local nodes = self:totable()
-	for i, node in ipairs(nodes) do
-		nodes[i] = tostring(node)
-	end
 	return table.concat(nodes, divisions)
 end
+
+return Stack

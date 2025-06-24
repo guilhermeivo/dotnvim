@@ -2,6 +2,7 @@ local M = {}
 
 local config = require("netrw.config")
 local parse = require("netrw.parse")
+local Stack = require("common.Stack")
 
 local get_status = function(node)
 	local status = ""
@@ -9,7 +10,7 @@ local get_status = function(node)
 
 	if node.type == parse.TYPE_FILE then
 		if node.dir ~= nil then
-			curdir = "." .. table.concat(node.dir, "/") .. "/" .. node.node
+			curdir = "." .. node.dir:show("/") .. "/" .. node.node
 			status = vim.fn.system("git status --porcelain=v1 -s " .. curdir .. " 2>/dev/null | tr -d '\n'")
 			status = string.gsub(status, "^%s+", "")
 			status = string.sub(status, 1, 1)
@@ -30,7 +31,7 @@ M.embelish = function(bufnr)
 
 	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
-	dir = {}
+	dir = Stack:create()
 	for i, line in ipairs(lines) do
 		local node = parse.get_node(line, dir)
 		if not node then
