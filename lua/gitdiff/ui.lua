@@ -17,11 +17,14 @@ M.update = function()
 
 	file = vim.fn.expand('%:p')
 	-- staged
-	lines = vim.fn.system("git diff --unified=0 HEAD " .. file .. "")
+	lines = vim.fn.system("git diff --unified=0 HEAD " .. file .. " | grep '@'")
+	lines_splited = split(lines, "\n")
 
 	local t = {}
-	for negative, positive in string.gmatch(lines, "@@%s[-|+](.*,?.*)[-|+](.*,?.*)%s@@") do
-		table.insert(t, positive)
+	for _, line in pairs(lines_splited) do
+		for old_file, new_file in string.gmatch(line, "@@%s[-|+](.*,?.*)[-|+](.*,?.*)%s@@") do
+			table.insert(t, new_file)
+		end
 	end
 
 	if not t then

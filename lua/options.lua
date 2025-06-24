@@ -4,7 +4,8 @@ vim.g.netrw_altv = 1
 vim.g.netrw_special_syntax = 1
 vim.g.netrw_keepdir = true
 
-vim.g.netrw_list_hide = '.*\\.git'
+vim.g.netrw_list_hide = "\\.git"
+vim.g.netrw_hide = 1
 
 vim.g.mapleader = " "
 

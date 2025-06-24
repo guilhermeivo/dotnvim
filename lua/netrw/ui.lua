@@ -58,6 +58,7 @@ M.embelish = function(bufnr)
 			end
 			vim.api.nvim_buf_set_extmark(bufnr, namespace, i - 1, node.col, opts)	
 		end
+
 		::continue::
 	end
 

@@ -9,10 +9,9 @@ M.options = {}
 function M.setup(options)
 	M.options = vim.tbl_deep_extend("force", {}, defaults, options or {})
 
-	-- Hook on BufModifiedSet to configure the netrw buffer.
 	vim.api.nvim_create_autocmd("BufModifiedSet", {
 		pattern = { "*" },
-		callback = function()
+		callback = function ()
 			-- check if file type is netrw
 			if not (vim.bo and vim.bo.filetype == "netrw") then
 				return
@@ -27,7 +26,6 @@ function M.setup(options)
 			local bufnr = vim.api.nvim_get_current_buf()
 
 			require("netrw.ui").embelish(bufnr)
-			-- require("netrw.actions").bind(bufnr)
 		end,
 		group = vim.api.nvim_create_augroup("netrw", { clear = false }),
 	})

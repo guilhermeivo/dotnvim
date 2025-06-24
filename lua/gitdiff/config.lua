@@ -1,7 +1,7 @@
 local M = {}
 
 function M.setup(options)
-	vim.api.nvim_create_autocmd("BufModifiedSet", {
+	vim.api.nvim_create_autocmd({ "BufModifiedSet", "BufReadPost" }, {
 		pattern = { "*" },
 		callback = function()
 			if not (vim.bo) then
@@ -9,7 +9,7 @@ function M.setup(options)
 			end
 			
 			opts = {}
-			opts["text"] = "｜"
+			opts["text"] = "▏"
 			opts["texthl"] = "GitGutterChange"
 			vim.fn.sign_define("GitChange", opts)
 
